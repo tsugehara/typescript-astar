@@ -140,12 +140,15 @@ var astar;
     })();
     astar.BinaryHeap = BinaryHeap;    
     var AStar = (function () {
-        function AStar(grid) {
+        function AStar(grid, disablePoints, enableCost) {
             this.grid = new Array();
             for(var x = 0, xl = grid.length; x < xl; x++) {
                 this.grid[x] = new Array();
                 for(var y = 0, yl = grid[x].length; y < yl; y++) {
                     var cost = (typeof grid[x][y] == "number") ? grid[x][y] : grid[x][y].type;
+                    if(cost > 1 && !enableCost) {
+                        cost = 1;
+                    }
                     this.grid[x][y] = {
                         org: grid[x][y],
                         f: 0,
@@ -162,7 +165,13 @@ var astar;
                     };
                 }
             }
+            if(disablePoints !== undefined) {
+                for(var i = 0; i < disablePoints.length; i++) {
+                    this.grid[disablePoints[i].x][disablePoints[i].y].cost = 0;
+                }
+            }
         }
+        AStar.NO_CHECK_START_POINT = false;
         AStar.prototype.heap = function () {
             return new BinaryHeap(function (node) {
                 return node.f;
@@ -192,6 +201,9 @@ var astar;
             } else {
                 _end = this._find(end);
             }
+            if(AStar.NO_CHECK_START_POINT == false && _start.cost <= 0) {
+                return [];
+            }
             openHeap.push(_start);
             while(openHeap.size() > 0) {
                 var currentNode = openHeap.pop();
@@ -208,7 +220,7 @@ var astar;
                 var neighbors = this.neighbors(currentNode, diagonal);
                 for(var i = 0, il = neighbors.length; i < il; i++) {
                     var neighbor = neighbors[i];
-                    if(neighbor.closed || neighbor.cost == 0) {
+                    if(neighbor.closed || neighbor.cost <= 0) {
                         continue;
                     }
                     var gScore = currentNode.g + neighbor.cost;
@@ -229,8 +241,8 @@ var astar;
             }
             return [];
         };
-        AStar.search = function search(grid, start, end, diagonal, heuristic) {
-            var astar = new AStar(grid);
+        AStar.search = function search(grid, start, end, disablePoints, diagonal, heuristic) {
+            var astar = new AStar(grid, disablePoints);
             return astar._search(start, end, diagonal, heuristic);
         };
         AStar.prototype.manhattan = function (pos0, pos1) {

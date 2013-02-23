@@ -47,12 +47,13 @@ module astar {
         org: any;
     }
     class AStar {
+        static NO_CHECK_START_POINT: bool;
         public grid: AStarData[][];
-        constructor(grid: any[][]);
+        constructor(grid: any[][], disablePoints?: Position[], enableCost?: bool);
         public heap(): BinaryHeap;
         public _find(org: any): AStarData;
         public _search(start: any, end: any, diagonal?: bool, heuristic?: Function): any[];
-        static search(grid: any[][], start: any, end: any, diagonal?: bool, heuristic?: Function): any[];
+        static search(grid: any[][], start: any, end: any, disablePoints?: Position[], diagonal?: bool, heuristic?: Function): any[];
         public manhattan(pos0: Position, pos1: Position): number;
         public neighbors(node: AStarData, diagonals?: bool): AStarData[];
     }

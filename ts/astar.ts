@@ -217,13 +217,16 @@ module astar {
 	}
 
 	export class AStar {
+		static NO_CHECK_START_POINT:bool = false;
 		grid:AStarData[][];
-		constructor(grid:any[][]) {
+		constructor(grid:any[][], disablePoints?:Position[], enableCost?:bool) {
 			this.grid = new AStarData[][];
 			for(var x = 0, xl = grid.length; x < xl; x++) {
 				this.grid[x] = new AStarData[];
 				for(var y = 0, yl = grid[x].length; y < yl; y++) {
 					var cost = (typeof grid[x][y] == "number") ? grid[x][y] : grid[x][y].type;
+					if (cost > 1 && !enableCost)
+						cost = 1;
 					this.grid[x][y] = {
 						org: grid[x][y],
 						f: 0,
@@ -239,6 +242,10 @@ module astar {
 						parent: null
 					}
 				}
+			}
+			if (disablePoints !== undefined) {
+				for (var i=0; i<disablePoints.length; i++)
+					this.grid[disablePoints[i].x][disablePoints[i].y].cost = 0;
 			}
 		}
 
@@ -272,6 +279,9 @@ module astar {
 			else
 				_end = this._find(end);
 
+			if (AStar.NO_CHECK_START_POINT == false && _start.cost <= 0)
+				return [];
+
 			openHeap.push(_start);
 
 			while(openHeap.size() > 0) {
@@ -299,7 +309,7 @@ module astar {
 				for(var i=0, il = neighbors.length; i < il; i++) {
 					var neighbor = neighbors[i];
 
-					if(neighbor.closed || neighbor.cost == 0) {
+					if(neighbor.closed || neighbor.cost <= 0) {
 						// Not a valid node to process, skip to next neighbor.
 						continue;
 					}
@@ -334,8 +344,8 @@ module astar {
 			return [];
 		}
 
-		static search(grid:any[][], start:any, end:any, diagonal?:bool, heuristic?:Function) {
-			var astar = new AStar(grid)
+		static search(grid:any[][], start:any, end:any, disablePoints?:Position[], diagonal?:bool, heuristic?:Function) {
+			var astar = new AStar(grid, disablePoints)
 			return astar._search(start, end, diagonal, heuristic);
 		}
 
