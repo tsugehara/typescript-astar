@@ -28,7 +28,7 @@ module astar {
 
 		constructor(grid:number[][]) {
 			this.elements = grid;
-			var nodes = new GraphNode[][];
+			var nodes:GraphNode[][] = [];
 			var row:number[], rowLength:number, len = grid.length;
 			for (var x = 0; x < len; ++x) {
 				row = grid[x];
@@ -220,9 +220,9 @@ module astar {
 		static NO_CHECK_START_POINT:bool = false;
 		grid:AStarData[][];
 		constructor(grid:any[][], disablePoints?:Position[], enableCost?:bool) {
-			this.grid = new AStarData[][];
+			this.grid = [];
 			for(var x = 0, xl = grid.length; x < xl; x++) {
-				this.grid[x] = new AStarData[];
+				this.grid[x] = [];
 				for(var y = 0, yl = grid[x].length; y < yl; y++) {
 					var cost = (typeof grid[x][y] == "number") ? grid[x][y] : grid[x][y].type;
 					if (cost > 1 && !enableCost)
