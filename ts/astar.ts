@@ -209,17 +209,17 @@ module astar {
 		g:number;
 		h:number;
 		cost:number;
-		visited:bool;
-		closed:bool;
+		visited:boolean;
+		closed:boolean;
 		parent:AStarData;
 		pos:Position;
 		org:any;
 	}
 
 	export class AStar {
-		static NO_CHECK_START_POINT:bool = false;
+		static NO_CHECK_START_POINT:boolean = false;
 		grid:AStarData[][];
-		constructor(grid:any[][], disablePoints?:Position[], enableCost?:bool) {
+		constructor(grid:any[][], disablePoints?:Position[], enableCost?:boolean) {
 			this.grid = [];
 			for(var x = 0, xl = grid.length; x < xl; x++) {
 				this.grid[x] = [];
@@ -262,7 +262,7 @@ module astar {
 						return this.grid[x][y];
 		}
 
-		_search(start:any, end:any, diagonal?:bool, heuristic?:Function) {
+		_search(start:any, end:any, diagonal?:boolean, heuristic?:Function) {
 			heuristic = heuristic || this.manhattan;
 			diagonal = !!diagonal;
 
@@ -344,7 +344,7 @@ module astar {
 			return [];
 		}
 
-		static search(grid:any[][], start:any, end:any, disablePoints?:Position[], diagonal?:bool, heuristic?:Function) {
+		static search(grid:any[][], start:any, end:any, disablePoints?:Position[], diagonal?:boolean, heuristic?:Function) {
 			var astar = new AStar(grid, disablePoints)
 			return astar._search(start, end, diagonal, heuristic);
 		}
@@ -357,7 +357,7 @@ module astar {
 			return d1 + d2;
 		}
 
-		neighbors(node:AStarData, diagonals?:bool):AStarData[] {
+		neighbors(node:AStarData, diagonals?:boolean):AStarData[] {
 			var grid = this.grid;
 			var ret = [];
 			var x = node.pos.x;
