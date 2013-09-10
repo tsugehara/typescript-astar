@@ -1,5 +1,4 @@
 astar.ts
 --out ../js/astar.js
 --declaration
---disallowbool
---disallowimportmodule
+--removeComments

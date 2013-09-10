@@ -2,7 +2,6 @@ var astar;
 (function (astar) {
     (function (GraphNodeType) {
         GraphNodeType[GraphNodeType["WALL"] = 0] = "WALL";
-
         GraphNodeType[GraphNodeType["OPEN"] = 1] = "OPEN";
     })(astar.GraphNodeType || (astar.GraphNodeType = {}));
     var GraphNodeType = astar.GraphNodeType;
@@ -26,10 +25,10 @@ var astar;
             var graphString = "\n";
             var nodes = this.nodes;
             var rowDebug, row, y, l;
-            for (var x = 0, len = nodes.length; x < len; ) {
+            for (var x = 0, len = nodes.length; x < len;) {
                 rowDebug = "";
                 row = nodes[x++];
-                for (y = 0, l = row.length; y < l; ) {
+                for (y = 0, l = row.length; y < l;) {
                     rowDebug += row[y++].type + " ";
                 }
                 graphString = graphString + rowDebug + "\n";
@@ -89,7 +88,8 @@ var astar;
             if (i !== this.content.length - 1) {
                 this.content[i] = end;
                 if (this.scoreFunction(end) < this.scoreFunction(node))
-                    this.sinkDown(i); else
+                    this.sinkDown(i);
+else
                     this.bubbleUp(i);
             }
         };
@@ -204,11 +204,13 @@ var astar;
 
             var _start, _end;
             if (start.x !== undefined && start.y !== undefined)
-                _start = this.grid[start.x][start.y]; else
+                _start = this.grid[start.x][start.y];
+else
                 _start = this._find(start);
 
             if (end.x !== undefined && end.y !== undefined)
-                _end = this.grid[end.x][end.y]; else
+                _end = this.grid[end.x][end.y];
+else
                 _end = this._find(end);
 
             if (AStar.NO_CHECK_START_POINT == false && _start.cost <= 0)
